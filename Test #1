@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad</title>
+</head>
+<body>
+    <h1>Notepad</h1>
+    
+    <textarea id="textInput" rows="10" cols="50"></textarea>
+
+    <button onclick="saveText()">Save as .html</button>
+    <button onclick="openFile()">Open</button>
+
+    <script>
+        function saveText() {
+            const textContent = document.getElementById('textInput').value;
+
+            // Create a Blob containing the text content
+            const blob = new Blob([textContent], { type: 'text/plain' });
+
+            // Create a link to download the file
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'notepad_file.html';
+
+            // Append the link to the body and trigger a click event to start the download
+            document.body.appendChild(a);
+            a.click();
+
+            // Remove the link from the body
+            document.body.removeChild(a);
+        }
+
+        function openFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+
+            // Trigger the input click event
+            input.click();
+
+            // Event listener for when the file is selected
+            input.addEventListener('change', function () {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // Set the content of the textarea to the content of the loaded file
+                    document.getElementById('textInput').value = e.target.result;
+                };
+
+                // Read the content of the selected file as text
+                reader.readAsText(file);
+            });
+        }
+    </script>
+</body>
+</html>
